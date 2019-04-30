@@ -1,0 +1,50 @@
+@model DynamicResourceIndexViewModel
+
+<h1>@RenderTitleSegments(T["Dynamic Resources"])</h1>
+
+<nav class="admin-toolbar">
+    <ul class="navbar-nav mr-auto">
+        @foreach (var type in Model.SupportedContentTypes)
+        {
+            <li class="nav-item">
+                <a asp-route-action="Create" asp-route-contentType="@type.ContentType" asp-route-returnUrl="@FullRequestPath" class="btn btn-primary" role="button">@T[$"Add {type.Extension} Resource"]</a>
+            </li>
+        }
+    </ul>
+</nav>
+
+<form asp-action="Index"> @* the form is necessary to generate and antiforgery token for the delete action *@
+
+    @if (Model.Resources.Any())
+    {
+        <ul class="list-group">
+            @foreach (var entry in Model.Resources)
+            {
+                <li class="list-group-item">
+                    <div class="properties">
+                        <div class="related">
+                            <a asp-action="Edit" asp-route-name="@entry.Name" asp-route-returnUrl="@FullRequestPath" class="btn btn-primary btn-sm">@T["Edit"]</a>
+                            <a asp-action="Resource" asp-route-name="@entry.Name" class="btn btn-success btn-sm" target="_blank">@T["Open"]</a>
+                            <a asp-action="Delete" asp-route-name="@entry.Name" class="btn btn-danger btn-sm" itemprop="RemoveUrl UnsafeUrl">@T["Delete"]</a>
+                        </div>
+                        <a asp-action="Edit" asp-route-name="@entry.Name" asp-route-returnUrl="@FullRequestPath">@entry.Name</a>
+                        @if (!String.IsNullOrWhiteSpace(entry.Resource.Description))
+                        {
+                        <span class="hint">
+                            @T["— {0}", entry.Resource.Description]
+                        </span>
+                        }
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            @T["<strong>Nothing here!</strong> There are no resources for the moment."]
+        </div>
+    }
+</form>
+
+@await DisplayAsync(Model.Pager)

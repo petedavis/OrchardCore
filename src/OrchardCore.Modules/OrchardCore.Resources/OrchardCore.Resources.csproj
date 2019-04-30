@@ -10,4 +10,8 @@
     <ProjectReference Include="..\..\OrchardCore\OrchardCore.ResourceManagement.Abstractions\OrchardCore.ResourceManagement.Abstractions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Scripts\codemirror\mode\css\" />
+  </ItemGroup>
+
 </Project>
